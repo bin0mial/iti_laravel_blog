@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\PostShowResponse;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        return view("posts.show", ["post" => $post]);
+        return new PostShowResponse($post);
     }
 
     public function edit(Post $post)
