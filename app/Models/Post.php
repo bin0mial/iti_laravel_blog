@@ -25,4 +25,9 @@ class Post extends Model
     {
         return $this->created_at->format('l jS \\of F Y h:i:s A') ;
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

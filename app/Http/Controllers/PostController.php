@@ -11,7 +11,7 @@ class PostController extends Controller
 
     public function index()
     {
-        return view("posts.index", ["posts" => Post::withTrashed()->paginate(20)]);
+        return view("posts.index", ["posts" => Post::withTrashed()->paginate(5)]);
     }
 
     public function create()
