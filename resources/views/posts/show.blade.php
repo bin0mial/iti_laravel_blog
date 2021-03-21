@@ -8,10 +8,10 @@
             Post Info
         </div>
         <div class="card-body">
-            <h5 class="card-title"><b>Title :-</b> {{ $post["title"] }}</h5>
+            <h5 class="card-title"><b>Title :-</b> {{ $post->title }}</h5>
             <p class="card-text">
                 <b>Description :-</b>
-                <p>{{ $post["description"] }}</p>
+                <p>{{ $post->description }}</p>
             </p>
         </div>
     </div>
@@ -20,9 +20,9 @@
             Post Creator
         </div>
         <div class="card-body">
-            <p class="card-text"><b>Name :-</b> {{ $post["creator"]["name"] }}</p>
-            <p class="card-text"><b>Email :-</b> {{ $post["creator"]["email"] }}</p>
-            <p class="card-text"><b>Created At :-</b> {{ $post["creator"]["created_at"] }}</p>
+            <p class="card-text"><b>Name :-</b> {{ $post->user->name }}</p>
+            <p class="card-text"><b>Email :-</b> {{ $post->user->email }}</p>
+            <p class="card-text"><b>Created At :-</b> {{ $post->getHumanReadableDate()}}</p>
         </div>
     </div>
 @endsection

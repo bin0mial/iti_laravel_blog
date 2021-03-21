@@ -2,88 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    private $posts = [
-        [
-            "id" => 1,
-            "title" => "Learn PHP",
-            "description" => "With supporting text below as a natural lead-in to additional content",
-            "created_at" => "2018-04-10",
-            "creator" => [
-                "name" => "Ahmed",
-                "email" => "ahmed@gmail.com",
-                "created_at" => "Thursday 25th of December 1975 02:15:16 PM"
-            ]
-        ],
-        [
-            "id" => 2,
-            "title" => "Solid Principles",
-            "description" => "With supporting text below as a natural lead-in to additional content",
-            "created_at" => "2018-04-12",
-            "creator" => [
-                "name" => "Mohamed",
-                "email" => "mohamed@gmail.com",
-                "created_at" => "Thursday 26th of December 1975 02:15:16 PM"
-            ]
-        ],
-        [
-            "id" => 3,
-            "title" => "Design Patterns",
-            "description" => "With supporting text below as a natural lead-in to additional content",
-            "created_at" => "2018-04-13",
-            "creator" => [
-                "name" => "Ali",
-                "email" => "ali@gmail.com",
-                "created_at" => "Thursday 27th of December 1975 02:15:16 PM"
-            ]
-        ],
-    ];
-
-    private function fetchPostByIndex($postId): array
-    {
-        $post = array_filter($this->posts, function ($post) use ($postId) {
-            return $post["id"] == $postId;
-        });
-        return !empty($post) ? array_pop($post) : [];
-    }
 
     public function index()
     {
-        return view("posts.index", ["posts" => $this->posts]);
+        return view("posts.index", ["posts" => Post::withTrashed()->paginate(20)]);
     }
 
     public function create()
     {
-        return view("posts.create");
+        return view("posts.create", ["users" => User::all()]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        Post::create($request->all());
         return redirect()->route("posts.index");
     }
 
-    public function show($postId)
+    public function restore(Request $request, $postId){
+        Post::withTrashed()->find($postId)->restore();
+        return redirect()->back();
+    }
+
+    public function show(Post $post)
     {
-        $post = $this->fetchPostByIndex($postId);
         return view("posts.show", ["post" => $post]);
     }
 
-    public function edit($postId)
+    public function edit(Post $post)
     {
-        $post = $this->fetchPostByIndex($postId);
-        return view("posts.edit", ["post" => $post]);
+        return view("posts.edit", ["post" => $post, "users" => User::all()]);
     }
 
-    public function update()
+    public function update(Request $request, Post $post)
     {
+        $post->update($request->all());
         return redirect()->route("posts.index");
     }
 
-    public function destroy()
+    public function destroy(Post $post)
     {
-        return redirect()->route("posts.index");
+        $post->delete();
+        return redirect()->back();
     }
 }

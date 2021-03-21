@@ -8,16 +8,18 @@
             @csrf
             <div class="form-group">
                 <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+                <input type="text" class="form-control" id="title" name="title">
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description"> </textarea>
+                <textarea class="form-control" id="description" name="description"> </textarea>
             </div>
             <div class="form-group">
-                <label for="post_creator">Post Creator</label>
-                <select class="form-control" id="post_creator">
-                    <option>Ahmed</option>
+                <label for="user_id">Post Creator</label>
+                <select class="form-control" id="user_id" name = "user_id">
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-success">Create Post</button>

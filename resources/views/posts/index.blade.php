@@ -4,7 +4,7 @@
 
 @section("content")
     <div class="d-flex justify-content-center my-4">
-        <x-button type="success" :target="route('posts.create')" displayed-name="Create Post"/>
+        <x-button type="success" buttonType="anchor" :target="route('posts.create')" displayed-name="Create Post"/>
     </div>
     <table class="table">
         <thead>
@@ -19,15 +19,24 @@
         <tbody>
         @foreach($posts as $post)
             <tr>
-                <th scope="row">{{ $post["id"] }}</th>
-                <td>{{ $post["title"] }}</td>
-                <td>{{ $post["creator"]["name"] }}</td>
-                <td>{{ $post["created_at"] }}</td>
+                <th scope="row">{{ $post->id }}</th>
+                <td>{{ $post->title }}</td>
+                <td>{{ $post->user->name }}</td>
+                <td>{{ $post->created_at->toDateString() }}</td>
                 <td>
-                    <x-button type="info" :target="route('posts.show', ['post' => $post['id']])" displayed-name="View"/>
-                    <x-button type="primary" :target="route('posts.edit', ['post' => $post['id']])"
-                              displayed-name="Edit"/>
-                    <x-button type="danger" :target="route('posts.destroy', ['post' => $post['id']])" displayed-name="Delete"/>
+                    <div class="d-flex flex-row">
+                    <x-button type="info" id="show" buttonType="anchor" :target="route('posts.show', ['post' => $post['id']])" displayed-name="View"/>
+                    <x-button type="primary" buttonType="anchor" :target="route('posts.edit', ['post' => $post['id']])" displayed-name="Edit"/>
+                    <form method="POST" id="delete_restore_form" onsubmit="return delete_restore_submit()">
+                        @csrf
+                        @if($post->trashed())
+                            <x-button type="secondary" :target="route('posts.restore', ['post' => $post['id']])" displayed-name="Restore"/>
+                        @else
+                            @method("delete")
+                            <x-button type="danger" :target="route('posts.destroy', ['post' => $post['id']])" displayed-name="Delete"/>
+                        @endif
+                    </form>
+                    </div>
                 </td>
             </tr>
 
@@ -35,5 +44,23 @@
 
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item {{ $posts->onFirstPage()? "disabled": ""}}"><a class="page-link" href="{{ $posts->previousPageUrl() }}" >Previous</a></li>
+                @for($i=1; $i<$posts->lastPage(); $i++)
+                    <li class="page-item {{ $i === $posts->currentPage()? "disabled": ""}}"><a class="page-link" href="{{ $posts->url($i) }}">{{ $i }}</a></li>
+                @endfor
+                <li class="page-item {{ !$posts->hasMorePages()? "disabled": ""}}"><a class="page-link" href="{{ $posts->nextPageUrl() }}">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+    <script>
 
+        function delete_restore_submit() {
+            return confirm("Are you sure you want to delete/restore the post?")
+        }
+
+
+    </script>
 @endsection
