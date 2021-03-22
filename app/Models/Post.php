@@ -8,18 +8,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Tags\HasTags;
 
 class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
     use Sluggable, SluggableScopeHelpers;
+    use HasTags;
 
     protected $fillable = [
         "title",
         "description",
         "user_id",
-        "image"
+        "image",
+        "tags"
     ];
 
     public function sluggable(): array
@@ -41,6 +44,7 @@ class Post extends Model
         if($image){
             return Storage::disk('local')->url('public/posts/'.$image.'.jpg');
         }
+        return null;
     }
 
     public function getImageAttribute($value){

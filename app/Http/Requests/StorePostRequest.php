@@ -33,6 +33,7 @@ class StorePostRequest extends FormRequest
             "title" => ["required", "min:3", "unique:posts,title," . $this->id],
             "description" => ["required", "min:10"],
             'image' => 'mimes:jpeg,png',
+            "tags" => "string"
         ];
     }
 }

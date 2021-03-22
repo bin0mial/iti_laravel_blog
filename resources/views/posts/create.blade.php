@@ -40,6 +40,10 @@
                     <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <input class="form-control" id="tags" name="tags"/>
+            </div>
             <button type="submit" class="btn btn-success">Create Post</button>
         </form>
     </div>

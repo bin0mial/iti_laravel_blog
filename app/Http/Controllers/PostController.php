@@ -25,6 +25,8 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         $validated = $request->validated();
+        if(isset($validated["tags"]))
+            $validated["tags"] = explode(",", $validated["tags"]);
         Post::create($validated);
         return redirect()->route("posts.index");
     }
