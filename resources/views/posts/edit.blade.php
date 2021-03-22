@@ -3,10 +3,20 @@
 @section("title", "Edit Post")
 
 @section("content")
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="mt-4">
         <form method="POST" action="{{ route('posts.update', ['post' => $post->id]) }}">
             @csrf
             @method("PUT")
+            <input type="hidden" name="post[id]" value="{{ $post->id }}">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">

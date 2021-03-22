@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
 use App\Http\Responses\PostShowResponse;
 use App\Models\Post;
 use App\Models\User;
@@ -20,7 +21,7 @@ class PostController extends Controller
         return view("posts.create", ["users" => User::all()]);
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         Post::create($request->all());
         return redirect()->route("posts.index");
@@ -41,7 +42,7 @@ class PostController extends Controller
         return view("posts.edit", ["post" => $post, "users" => User::all()]);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(StorePostRequest $request, Post $post)
     {
         $post->update($request->all());
         return redirect()->route("posts.index");
