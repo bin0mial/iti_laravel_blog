@@ -7,6 +7,7 @@ use App\Http\Responses\PostShowResponse;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -23,7 +24,8 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        Post::create($request->validated());
+        $validated = $request->validated();
+        Post::create($validated);
         return redirect()->route("posts.index");
     }
 
@@ -50,6 +52,9 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        Storage::delete($post->getRawOriginal("image"));
+        $post->image = null;
+        $post->save();
         $post->delete();
         return redirect()->back();
     }

@@ -7,6 +7,9 @@
             Post Info
         </div>
         <div class="card-body">
+            @if($post->image!="/storage/")
+            <img src="{{ $post->image }}" width="100%">
+            @endif
             <h5 class="card-title"><b>Title :-</b> {{ $post->title }}</h5>
             <p class="card-text">
                 <b>Description :-</b>

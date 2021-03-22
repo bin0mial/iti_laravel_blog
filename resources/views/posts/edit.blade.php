@@ -16,7 +16,7 @@
         <form method="POST" action="{{ route('posts.update', ['post' => $post->slug]) }}">
             @csrf
             @method("PUT")
-            <input type="hidden" name="post[id]" value="{{ $post->id }}">
+            <input type="hidden" name="id" value="{{ $post->id }}">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">

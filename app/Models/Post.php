@@ -7,6 +7,7 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -17,7 +18,8 @@ class Post extends Model
     protected $fillable = [
         "title",
         "description",
-        "user_id"
+        "user_id",
+        "image"
     ];
 
     public function sluggable(): array
@@ -33,6 +35,21 @@ class Post extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function getPostImage($image){
+        if($image){
+            return Storage::disk('local')->url('public/posts/'.$image.'.jpg');
+        }
+    }
+
+    public function getImageAttribute($value){
+        return Storage::url($value);
+    }
+
+    public function setImageAttribute($value){
+        $path = $value? $value->storePublicly("public/".$this->user_id):null;
+        $this->attributes['image'] = $path;
     }
 
     public function user(){
