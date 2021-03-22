@@ -23,7 +23,7 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        Post::create($request->all());
+        Post::create($request->validated());
         return redirect()->route("posts.index");
     }
 
@@ -44,7 +44,7 @@ class PostController extends Controller
 
     public function update(StorePostRequest $request, Post $post)
     {
-        $post->update($request->all());
+        $post->update($request->validated());
         return redirect()->route("posts.index");
     }
 
