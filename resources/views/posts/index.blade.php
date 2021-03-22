@@ -25,17 +25,17 @@
                 <td>{{ $post->created_at->toDateString() }}</td>
                 <td>
                     <div class="d-flex flex-row">
-                    <a type="button" href="{{ route('posts.show', ['post' => $post['id']]) }}" class="btn btn-primary mr-1 showPostModal" data-toggle="modal" data-target="#exampleModalLong">
+                    <a type="button" href="{{ route('posts.show', ['post' => $post->slug]) }}" class="btn btn-primary mr-1 showPostModal" data-toggle="modal" data-target="#exampleModalLong">
                         View
                     </a>
-                        <x-button type="primary" buttonType="anchor" :target="route('posts.edit', ['post' => $post['id']])" displayed-name="Edit"/>
+                        <x-button type="primary" buttonType="anchor" :target="route('posts.edit', ['post' => $post->slug])" displayed-name="Edit"/>
                         <form method="POST" id="delete_restore_form" onsubmit="return delete_restore_submit()">
                             @csrf
                             @if($post->trashed())
-                                <x-button type="secondary" :target="route('posts.restore', ['post' => $post['id']])" displayed-name="Restore"/>
+                                <x-button type="secondary" :target="route('posts.restore', ['post' => $post->id])" displayed-name="Restore"/>
                             @else
                                 @method("delete")
-                                <x-button type="danger" :target="route('posts.destroy', ['post' => $post['id']])" displayed-name="Delete"/>
+                                <x-button type="danger" :target="route('posts.destroy', ['post' => $post->slug])" displayed-name="Delete"/>
                             @endif
                         </form>
                     </div>

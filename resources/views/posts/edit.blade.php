@@ -13,7 +13,7 @@
         </div>
     @endif
     <div class="mt-4">
-        <form method="POST" action="{{ route('posts.update', ['post' => $post->id]) }}">
+        <form method="POST" action="{{ route('posts.update', ['post' => $post->slug]) }}">
             @csrf
             @method("PUT")
             <input type="hidden" name="post[id]" value="{{ $post->id }}">
