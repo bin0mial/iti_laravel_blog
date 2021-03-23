@@ -45,6 +45,18 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
+                @auth
+                    @php($socialUser = auth()->user()->socialAccounts()->where("provider", "github")->first())
+                    @if($socialUser)
+                        <a href="{{route("social_account.show", ["github", $socialUser->nickname])}}" class="btn btn-dark">
+                            {{ __('Show Github Info') }}
+                        </a>
+                    @else
+                        <a href="{{route("Login.redirectToProvider", "github")}}" class="btn btn-dark">
+                            {{ __('Connect to Github') }}
+                        </a>
+                    @endif
+                @endauth
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">

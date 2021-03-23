@@ -74,6 +74,7 @@ class LoginController extends Controller
         if(!$socialAccount){
             $socialAccount = new SocialAccount();
             $socialAccount->user_id = $user->id;
+            $socialAccount->nickname = $socialUser->nickname;
             $socialAccount->token = $socialUser->token;
             $socialAccount->provider = $provider;
             $socialAccount->provider_id = $socialUser->getId();
@@ -82,7 +83,9 @@ class LoginController extends Controller
             $socialAccount->token = $socialUser->token;
         }
         $socialAccount->save();
-        Auth::login($user);
+        if(!Auth::check()) {
+            Auth::login($user);
+        }
         return redirect()->route("posts.index");
     }
 }

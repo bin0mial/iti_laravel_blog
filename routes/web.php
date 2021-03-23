@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PostController;
-use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\SocialAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,8 @@ Route::group(["prefix"=>"posts", "middleware"=>["auth"]], function (){
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/social-account/{provider}/{nickname}', [SocialAccountController::class, "show"])->middleware("auth")->name("social_account.show");
 
 Route::get('/auth/{provider}/redirect', [LoginController::class, "redirectToProvider"])->name("Login.redirectToProvider");
 

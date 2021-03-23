@@ -16,6 +16,7 @@ class CreateSocialAccountsTable extends Migration
         Schema::create('social_accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
+            $table->string("nickname")->nullable();
             $table->string('provider');
             $table->string('provider_id');
             $table->string('token');
@@ -32,6 +33,6 @@ class CreateSocialAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('social_account');
+        Schema::dropIfExists('social_accounts');
     }
 }
