@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use \App\Http\Controllers\PostController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(["prefix"=>"posts", "middlewares"=>["auth"]], function (){
+Route::group(["prefix"=>"posts", "middleware"=>["auth"]], function (){
     Route::get('/', [PostController::class, 'index'])->name('posts.index');
     Route::get('/create',[PostController::class, 'create'])->name('posts.create');
     Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
@@ -34,3 +35,8 @@ Route::group(["prefix"=>"posts", "middlewares"=>["auth"]], function (){
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/auth/{provider}/redirect', [LoginController::class, "redirectToProvider"])->name("Login.redirectToProvider");
+
+Route::get('/auth/{provider}/callback', [LoginController::class, "handleProviderCallback"]);
+

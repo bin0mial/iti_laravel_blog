@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\SocialAccount;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -36,5 +41,48 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @param $provider
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
+
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @param $provider
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handleProviderCallback($provider)
+    {
+        $socialUser = Socialite::driver($provider)->user();
+        $user = User::where(['email' => $socialUser->getEmail()])->first();
+        if(!$user){
+            $user = new User();
+            $user->email = $socialUser->getEmail();
+            $user->name = $socialUser->getName();
+            $user->save();
+        }
+        $socialAccount = $user->socialAccounts()->where("provider", $provider)->first();
+        if(!$socialAccount){
+            $socialAccount = new SocialAccount();
+            $socialAccount->user_id = $user->id;
+            $socialAccount->token = $socialUser->token;
+            $socialAccount->provider = $provider;
+            $socialAccount->provider_id = $socialUser->getId();
+        }
+        else{
+            $socialAccount->token = $socialUser->token;
+        }
+        $socialAccount->save();
+        Auth::login($user);
+        return redirect()->route("posts.index");
     }
 }

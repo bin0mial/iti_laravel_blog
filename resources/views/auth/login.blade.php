@@ -53,7 +53,13 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <a href="{{route("Login.redirectToProvider", "github")}}" class="btn btn-dark">
+                                    {{ __('Github') }}
+                                </a>
+                                <a href="{{route("Login.redirectToProvider", "google")}}" class="btn btn-primary">
+                                    {{ __('Google') }}
+                                </a>
+                                <button type="submit" class="btn btn-outline-primary">
                                     {{ __('Login') }}
                                 </button>
 
