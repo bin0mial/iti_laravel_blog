@@ -29,6 +29,18 @@
     </div>
     <div class="card mt-4">
         <div class="card-header">
+            Tags
+        </div>
+        <div class="card-body">
+            @forelse($post->tags as $tag)
+                <code class="bg-dark text-white">#{{ $tag->name }}</code>
+            @empty
+                <div class="text-center">No Tags yet!</div>
+            @endforelse
+        </div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-header">
             Comments
         </div>
         <div class="card-body">

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\PostRequest;
 use App\Http\Responses\PostShowResponse;
 use App\Models\Post;
 use App\Models\User;
@@ -22,11 +22,12 @@ class PostController extends Controller
         return view("posts.create", ["users" => User::all()]);
     }
 
-    public function store(StorePostRequest $request)
+    public function store(PostRequest $request)
     {
         $validated = $request->validated();
-        if(isset($validated["tags"]))
+        if(isset($validated["tags"])) {
             $validated["tags"] = explode(",", $validated["tags"]);
+        }
         Post::create($validated);
         return redirect()->route("posts.index");
     }
@@ -46,7 +47,7 @@ class PostController extends Controller
         return view("posts.edit", ["post" => $post, "users" => User::all()]);
     }
 
-    public function update(StorePostRequest $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
         $post->update($request->validated());
         return redirect()->route("posts.index");
